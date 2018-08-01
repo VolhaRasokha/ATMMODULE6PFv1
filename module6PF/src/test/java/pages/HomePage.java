@@ -1,10 +1,14 @@
 package pages;
 
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 
 public class HomePage extends BasePage {
+	public HomePage(WebDriver driver) {
+		super(driver);
+}
 
 	private static final String MAILRU_URL = "https://mail.ru/";
 	
@@ -19,7 +23,7 @@ public class HomePage extends BasePage {
 	
 	public HomePage startBrowser(){
 		driver.get(MAILRU_URL);
-		return new HomePage();
+		return new HomePage(driver);
 	}
 	
 	public AccountPage login(String login, String password){
@@ -41,7 +45,7 @@ public class HomePage extends BasePage {
 		submitBtn.click();
 		
 		new Actions(driver).click(submitBtn).build().perform();
-		return new AccountPage();
+		return new AccountPage(driver);
 	}
 	
 }

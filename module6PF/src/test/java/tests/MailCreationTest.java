@@ -1,12 +1,11 @@
 package tests;
 
-import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import utils.ScreenShooter;
 import utils.WebDriverSingleton;
-
 import pages.AccountPage;
 import pages.CreateEmailPage;
 import pages.DraftPage;
@@ -20,33 +19,28 @@ public class MailCreationTest extends TestBase {
 	private static long currentKey = System.currentTimeMillis();
 	public static final String SUBJECT = "TestSubject" + currentKey;
 	private static final String TEXT_BODY = "TestTextBody" + currentKey;
-    
 	
 	@Test(description = "Login to mail.ru", groups={"test_1"})
 	public void mailRuLoginTest() {
-		
-		HomePage homePage = PageFactory.initElements(WebDriverSingleton.getWebDriverInstance(), HomePage.class);
+		WebDriver driver = WebDriverSingleton.getWebDriverInstance();
+		HomePage homePage = new HomePage(driver);
 		homePage.startBrowser();
-		homePage.login(MAILRU_LOGIN_FIRST_ACCOUNT, MAILRU_PASSWORD_FIRST_ACCOUNT);
-		
-		AccountPage accountPage = PageFactory.initElements(WebDriverSingleton.getWebDriverInstance(), AccountPage.class);;
+		AccountPage accountPage = homePage.login(MAILRU_LOGIN_FIRST_ACCOUNT, MAILRU_PASSWORD_FIRST_ACCOUNT);
 		ScreenShooter.takeScreenshot();
 		Assert.assertTrue(accountPage.isEmailPresentOnPage(EXPECTED_ACCOUNT_ICON), "User is not login!");
 	}
 	
 	@Test(description = "Mail creation", dependsOnMethods = { "mailRuLoginTest" }, groups={"test_1"})
 	public void mailRuMailCreationTest(){
-		AccountPage accountPage = PageFactory.initElements(WebDriverSingleton.getWebDriverInstance(), AccountPage.class);	
-		accountPage.clickMailCreationBtn();
+		AccountPage accountPage = new AccountPage(driver);	
 		
-		CreateEmailPage mailCreationPage = PageFactory.initElements(WebDriverSingleton.getWebDriverInstance(), CreateEmailPage.class);	
+		CreateEmailPage mailCreationPage = accountPage.clickMailCreationBtn();
 		mailCreationPage.fillMailAddress(MAIL_TO_ADDRESS);
 		mailCreationPage.fillMailSubject(SUBJECT);
 		mailCreationPage.fillMailBody(TEXT_BODY);
 		mailCreationPage.clickSaveDraftBtn();
-		accountPage.clickMailDraftMenuLink();
 		
-		DraftPage draftPage = PageFactory.initElements(WebDriverSingleton.getWebDriverInstance(), DraftPage.class);	
+		DraftPage draftPage = accountPage.clickMailDraftMenuLink();
 		String actualSubject = draftPage.getDraftMailSubject(0);
 		Assert.assertEquals(actualSubject,SUBJECT);
 		

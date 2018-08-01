@@ -1,12 +1,17 @@
 package pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 
 public class CreateEmailPage extends BasePage{
 	
+	public CreateEmailPage(WebDriver driver) {
+		super(driver);
+	}
+
 	@FindBy(css = "textarea[data-original-name = 'To']")
 	private WebElement mailToAddress;
 	
@@ -38,7 +43,7 @@ public class CreateEmailPage extends BasePage{
 		mailToAddress.clear();
 		mailToAddress.sendKeys(mailAddress);
 		unHighlightElement(mailToAddress);
-		return new CreateEmailPage();
+		return new CreateEmailPage(driver);
 	}
 	
 	public CreateEmailPage fillMailSubject(String subject){	
@@ -47,7 +52,7 @@ public class CreateEmailPage extends BasePage{
 		mailSubject.clear();
 		mailSubject.sendKeys(subject);
 		unHighlightElement(mailSubject);
-		return new CreateEmailPage();
+		return new CreateEmailPage(driver);
 	}
 	
 	public CreateEmailPage fillMailBody(String body){
@@ -55,7 +60,7 @@ public class CreateEmailPage extends BasePage{
 		textBody.clear();
 		textBody.sendKeys(body);
 		driver.switchTo().defaultContent();	
-		return new CreateEmailPage();
+		return new CreateEmailPage(driver);
 	}
 	
 	public CreateEmailPage clickSaveDraftBtn(){
@@ -65,14 +70,14 @@ public class CreateEmailPage extends BasePage{
 		waitForElementVisible(saveStatus);
 		highlightElement(saveStatus);
 		unHighlightElement(saveStatus);
-		return new CreateEmailPage(); 
+		return new CreateEmailPage(driver); 
 	}
 
 	
 	public AccountPage clickMailSendBtn(){
 		waitForElementVisible(mailToAddress);
 		sendBtn.click();
-		return new AccountPage();
+		return new AccountPage(driver);
 	}
 	
 	public String getMailToAddress(){
@@ -91,7 +96,7 @@ public class CreateEmailPage extends BasePage{
 		driver.switchTo().frame(mailBody);
 		new Actions(driver).sendKeys(textBody, "to test actions").build().perform();
 		driver.switchTo().defaultContent();		
-		return new CreateEmailPage();
+		return new CreateEmailPage(driver);
 	}
 	
 }

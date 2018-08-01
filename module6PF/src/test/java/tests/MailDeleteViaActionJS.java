@@ -1,10 +1,7 @@
 package tests;
 
-import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-
-import utils.WebDriverSingleton;
 
 import pages.AccountPage;
 import pages.CreateEmailPage;
@@ -17,14 +14,12 @@ public class MailDeleteViaActionJS extends TestBase{
 	public void actionsTest(){
 		String mailAddress = "vra_atmmodule6@mail.ru";
 		
-		HomePage homePage = PageFactory.initElements(WebDriverSingleton.getWebDriverInstance(), HomePage.class);
+		HomePage homePage = new HomePage(driver);
 		homePage.startBrowser();
-		homePage.login(MAILRU_LOGIN_FIRST_ACCOUNT, MAILRU_PASSWORD_FIRST_ACCOUNT);
 		
-		AccountPage accountPage = PageFactory.initElements(WebDriverSingleton.getWebDriverInstance(), AccountPage.class);
-		accountPage.clickMailCreationBtn();
-		
-		CreateEmailPage mailCreationPage = PageFactory.initElements(WebDriverSingleton.getWebDriverInstance(), CreateEmailPage.class);
+		AccountPage accountPage = homePage.login(MAILRU_LOGIN_FIRST_ACCOUNT, MAILRU_PASSWORD_FIRST_ACCOUNT);
+
+		CreateEmailPage mailCreationPage = accountPage.clickMailCreationBtn();
 		mailCreationPage.fillMailByJS(mailAddress);
 		mailCreationPage.clickMailSendBtn();
 		
@@ -37,18 +32,19 @@ public class MailDeleteViaActionJS extends TestBase{
 		
 		homePage.login(MAILRU_LOGIN_SECOND_ACCOUNT, MAILRU_PASSWORD_SECOND_ACCOUNT);
 		
-		IncomingPage incomingPage = PageFactory.initElements(WebDriverSingleton.getWebDriverInstance(), IncomingPage.class);
+		IncomingPage incomingPage = new IncomingPage(driver);
 		String subjectOfFirstEmail = incomingPage.getIncomingMailSubject(0);
 		String subjectOfSecondEmail = incomingPage.getIncomingMailSubject(1);
 
-		incomingPage.deleteMailsByActionsJS(0,1);
-		
+		incomingPage.deleteMailByActionsJS(0);		
 		incomingPage.refresh();
+		String actualSubjectOfFirstEmail = incomingPage.getIncomingMailSubject(0);
+		Assert.assertNotEquals(subjectOfFirstEmail, actualSubjectOfFirstEmail);
 
-		Assert.assertFalse(incomingPage.isEmailPresentOnPage(subjectOfFirstEmail), "Email is present in Incoming folder");
-		Assert.assertFalse(incomingPage.isEmailPresentOnPage(subjectOfSecondEmail), "Email is present in Incoming folder");
-
-
+		incomingPage.sendMailtoArchiveByJS(0);
+		incomingPage.refresh();
+		String actualSubjectOfSecondEmail = incomingPage.getIncomingMailSubject(0);
+		Assert.assertNotEquals(subjectOfSecondEmail, actualSubjectOfSecondEmail);
 	}
 	
 
