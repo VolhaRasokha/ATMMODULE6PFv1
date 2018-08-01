@@ -2,12 +2,17 @@ package pages;
 
 import java.util.List;
 
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 
 public class BasketPage extends AccountPage {
 	
+	public BasketPage(WebDriver driver) {
+		super(driver);
+	}
+
 	@FindBy(xpath = "//a[contains(@href,'https://e.mail.ru/thread/')]")
 	private List <WebElement> mailsInBasket;
 	

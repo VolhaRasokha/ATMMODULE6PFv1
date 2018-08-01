@@ -3,10 +3,16 @@ package pages;
 import java.util.List;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 public class DraftPage extends AccountPage {
+	
+	public DraftPage(WebDriver driver) {
+		super(driver);
+	}
+	
 	@FindBy(xpath = "//*[contains(@href,'https://e.mail.ru/compose/')]")
 	private List<WebElement> draftMails;
 
@@ -16,7 +22,7 @@ public class DraftPage extends AccountPage {
 		highlightElement(draftMail);
 		unHighlightElement(draftMail);
 		draftMail.click();
-		return new CreateEmailPage();
+		return new CreateEmailPage(driver);
 	}
 
 	public String getDraftMailSubject(int index) {
@@ -26,7 +32,7 @@ public class DraftPage extends AccountPage {
 	public CreateEmailPage openDraftMail(int index) {
 		WebElement draftMail = getDraftMail(index);
 		draftMail.click();
-		return new CreateEmailPage();
+		return new CreateEmailPage(driver);
 	}
 	
 	private WebElement getDraftMail(int index) {
