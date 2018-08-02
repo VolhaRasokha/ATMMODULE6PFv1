@@ -31,7 +31,7 @@ public class AccountPage extends BasePage {
 
 	public static By mailSentTitle = By
 			.cssSelector("[class='message-sent__title']");
-
+// Please make a locator provate and remove "static"
 	public CreateEmailPage clickMailCreationBtn() {
 		waitForElementVisible(mailCreationBtn);
 		highlightElement(mailCreationBtn);
