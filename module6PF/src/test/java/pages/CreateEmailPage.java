@@ -86,6 +86,10 @@ public class CreateEmailPage extends BasePage{
 	
 	public boolean isMailBodyEnable(String textBody){
 		By SEARCH_ACTUAL_MAIL_BODY_LOCATOR = By.xpath("//*[text()= '" + textBody + "']");
+// 		It's preferrable to move SEARCH_ACTUAL_MAIL_BODY_LOCATOR to class constants as string:
+// 		private static final String SEARCH_ACTUAL_MAIL_BODY_LOCATOR = "//*[text()= '%s']";
+// 		You can also use String.format then:
+// 		String.format(SEARCH_ACTUAL_MAIL_BODY_LOCATOR, textBody);
 		return driver.findElement(SEARCH_ACTUAL_MAIL_BODY_LOCATOR).isEnabled();
 	}
 	
