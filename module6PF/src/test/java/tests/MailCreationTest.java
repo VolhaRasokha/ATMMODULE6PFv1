@@ -29,7 +29,11 @@ public class MailCreationTest extends TestBase {
 		ScreenShooter.takeScreenshot();
 		Assert.assertTrue(accountPage.isEmailPresentOnPage(EXPECTED_ACCOUNT_ICON), "User is not login!");
 	}
-	
+// 	It's a good practice to move "start browser" actions into a separate method, e.g.
+// 	@BeforeClass()
+// 	public void startBrowser() {
+// 	some actions
+// 	}
 	@Test(description = "Mail creation", dependsOnMethods = { "mailRuLoginTest" }, groups={"test_1"})
 	public void mailRuMailCreationTest(){
 		AccountPage accountPage = new AccountPage(driver);	
@@ -45,6 +49,7 @@ public class MailCreationTest extends TestBase {
 		Assert.assertEquals(actualSubject,SUBJECT);
 		
 		draftPage.openDraftMail(0);
+// 		Please move 0 into constants
 		String actualMailToAddress =  mailCreationPage.getMailToAddress();
 		ScreenShooter.takeScreenshot();
 		Assert.assertEquals(actualMailToAddress,MAIL_TO_ADDRESS + ",");	
